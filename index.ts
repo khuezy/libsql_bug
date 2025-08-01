@@ -59,8 +59,8 @@ async function main() {
   // Finally query the table. With this query, turso client update the local `/tmp/data/bug.db`
   // ATTN: comment the next two lines out and rerun the script... 
   //       Without this query, the local client never gets updated.
-  // const query = await embeddedClient.run(sql`SELECT * FROM _test;`)
-  // console.log('SELECT result: ', query.rows[0])
+  const query = await embeddedClient.run(sql`SELECT * FROM _test;`)
+  console.log('SELECT result: ', query.rows[0])
 }
 
 main()
