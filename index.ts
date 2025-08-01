@@ -4,8 +4,8 @@ import { sql } from 'drizzle-orm'
 
 
 const DB_PATH = '/tmp/data/bug.db'
-const SYNC_URL = 'libsql://dev-khuezy.aws-us-east-1.turso.io'
-const AUTH_TOKEN = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NDQyMjg1NDgsImlkIjoiMWExZmE5ODEtNGNjZS00MDZhLWFhYTYtODVhZTI0NGJlOWEzIiwicmlkIjoiZjAzMDE5MjUtOWQ2MS00ODdmLWJkZDktYjk5MjBhZDYwZDI3In0.oHWCX7IM9FWMOG_zMwh3tzuXmwe9rXndsgnUi1h9gqBo7eJsZ5S6ccS4Dxq7SKWI-7vwujEOBAgIpGTjepTnCw'
+const SYNC_URL = 'libsql://<db>.aws-us-east-1.turso.io'
+const AUTH_TOKEN = ''
 
 
 async function getNormalClient() {
