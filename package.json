@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "dev": "ts-node index"
+    "dev": "ts-node index.ts"
   },
   "dependencies": {
-    "@libsql/client": "0.15.5",
+    "@libsql/client": "0.15.10",
     "@tsconfig/node22": "22.0.0",
     "drizzle-kit": "beta",
     "drizzle-orm": "beta",

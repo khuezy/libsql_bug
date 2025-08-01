@@ -3,9 +3,9 @@ import { type Client, type Config, createClient } from '@libsql/client'
 import { sql } from 'drizzle-orm'
 
 
-const DB_PATH = '/tmp/data/local.db'
-const SYNC_URL = 'libsql://<db>.aws-us-east-1.turso.io'
-const AUTH_TOKEN = ''
+const DB_PATH = '/tmp/data/bug.db'
+const SYNC_URL = 'libsql://dev-khuezy.aws-us-east-1.turso.io'
+const AUTH_TOKEN = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3NDQyMjg1NDgsImlkIjoiMWExZmE5ODEtNGNjZS00MDZhLWFhYTYtODVhZTI0NGJlOWEzIiwicmlkIjoiZjAzMDE5MjUtOWQ2MS00ODdmLWJkZDktYjk5MjBhZDYwZDI3In0.oHWCX7IM9FWMOG_zMwh3tzuXmwe9rXndsgnUi1h9gqBo7eJsZ5S6ccS4Dxq7SKWI-7vwujEOBAgIpGTjepTnCw'
 
 
 async function getNormalClient() {
@@ -36,27 +36,31 @@ async function getEmbeddedReplicaClient() {
 
 async function main() {
 
-  // A non Embedded Replica
-  // Query works for normal and transactions
+  // Create `_test` table
   const normalDb = await getNormalClient()
-  const normalResults = await normalDb.run(sql`SELECT 1;`)
-  console.log('Normal DB query: ', normalResults.rows[0])
-  await normalDb.transaction(async tx => {
-    const tResult = await tx.run(sql`SELECT 1;`)
-    console.log('Normal DB query inside transaction: ', tResult.rows[0])
-  })
+  await normalDb.run(sql`
+    CREATE TABLE IF NOT EXISTS _test (
+      id INTEGER PRIMARY KEY,
+      number INTEGER
+    );
+  `);
 
 
-
-  // Embedded Replica
-  // Query only works for normal queries and returns undefined for transactions
+  // Embedded Replica client is having issues...
   const embeddedClient = await getEmbeddedReplicaClient()
-  const result = await embeddedClient.run(sql`SELECT 2;`)
-  console.log('ER DB query:', result.rows[0])
-  await embeddedClient.transaction(async tx => {
-    const tResult = await tx.run(sql`SELECT 2;`)
-    console.log('ER DB query inside transaction: ', tResult.rows[0])
-  })
+
+  // First we insert a base record, subsequent inserts will be no op
+  const insert = await embeddedClient.run(sql`INSERT into _test(id, number) values(1, 1) ON CONFLICT(id) DO NOTHING RETURNING *;`)
+
+  // Then update "number" by one each time
+  const update = await embeddedClient.run(sql`UPDATE _test set number = number + 1  RETURNING *`)
+  console.log('UPDATE returns updated value: ', update.rows[0])
+
+  // Finally query the table. With this query, turso client update the local `/tmp/data/bug.db`
+  // ATTN: comment the next two lines out and rerun the script... 
+  //       Without this query, the local client never gets updated.
+  // const query = await embeddedClient.run(sql`SELECT * FROM _test;`)
+  // console.log('SELECT result: ', query.rows[0])
 }
 
 main()
