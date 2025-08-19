@@ -3,8 +3,8 @@ import { type Client, type Config, createClient } from '@libsql/client'
 import { sql } from 'drizzle-orm'
 import assert from 'node:assert'
 const DB_PATH = '/tmp/data/bug.db'
-const SYNC_URL = 'libsql://dev-khuezy.aws-us-east-1.turso.io'
-const AUTH_TOKEN = 'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NTQwNzExNDUsImlkIjoiMWExZmE5ODEtNGNjZS00MDZhLWFhYTYtODVhZTI0NGJlOWEzIiwicmlkIjoiZjAzMDE5MjUtOWQ2MS00ODdmLWJkZDktYjk5MjBhZDYwZDI3In0.rNCxmXPlfw8Jh2MkAgvNFbSrIytUatE67ekaVIsuQew_YnLVWjQY_dRWYnoMkX53RgACEM0R3vY5VZjxeyuyAg'
+const SYNC_URL = ''
+const AUTH_TOKEN = ''
 
 
 async function getNormalClient() {
